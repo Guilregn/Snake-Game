@@ -7,12 +7,23 @@ public class Renderer extends Frame {
 	Button b = new Button("Start Game");
 	Button b2 = new Button("Exit");
 	JLabel l = new JLabel("Snake Game");
+	int width = -1;
+	int height = -1;
 	
 	public Renderer(){
-		b.setBounds(400,450,200,100);
-		b2.setBounds(400,600,200,100);
-		l.setBounds(200,100,600,300);
-		l.setFont(new Font(l.getName(), 65, 100));
+		width = Toolkit.getDefaultToolkit().getScreenSize().width;
+		height = Toolkit.getDefaultToolkit().getScreenSize().height;
+	
+		f.setSize((int)(3.0/4.0 * width), (int) (3.0/4.0 * height));
+		f.setLocation((int)(1.0/8.0 * width), (int) (1.0/8.0 * height));
+		f.setTitle("Snake Game");
+		
+		b.setBounds((int)(9.0/32.0 * width), (int) (35.0/80.0 * height),(int)(3.0/16.0 * width), (int) (3.0/40.0 * height));
+		b2.setBounds((int)(9.0/32.0 * width), (int) (45.0/80.0 * height),(int)(3.0/16.0 * width), (int) (3.0/40.0 * height));
+		
+		int fontSizeToUse = (int) (5.0/40.0 * height);
+		l.setBounds((int)(5.0/32.0 * width), (int) (5.0/80.0 * height), width, (int) (5.0/40.0 * height));
+		l.setFont(new Font(l.getName(), Font.PLAIN, fontSizeToUse));
 		
 		f.add(b);
 		f.add(b2);
@@ -20,9 +31,6 @@ public class Renderer extends Frame {
 		
 		b.addActionListener(new jouer());
 		b2.addActionListener(new Sortir());
-		
-		f.setSize(1000,3000);
-		f.setTitle("Snake Game");
 		
 		f.setLayout(null);
 		f.setVisible(true);
