@@ -7,11 +7,11 @@ public class Renderer extends Frame {
 	Button b = new Button("Start Game");
 	Button b2 = new Button("Exit");
 	JLabel l = new JLabel("Snake Game");
-	int width = -1;
-	int height = -1;
+	int width;
+	int height;
 	
 	public Renderer(){
-		width = Toolkit.getDefaultToolkit().getScreenSize().width;
+		= -1width = Toolkit.getDefaultToolkit().getScreenSize().width;
 		height = Toolkit.getDefaultToolkit().getScreenSize().height;
 	
 		f.setSize((int)(3.0/4.0 * width), (int) (3.0/4.0 * height));
