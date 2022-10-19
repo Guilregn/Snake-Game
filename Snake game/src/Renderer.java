@@ -3,43 +3,56 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Renderer extends Frame {
-	Frame f = new Frame();
-	Button b = new Button("Start Game");
-	Button b2 = new Button("Exit");
-	JLabel l = new JLabel("Snake Game");
-	int width;
-	int height;
+	
+    // getScreenSize() returns the size of the screen in pixels 
+    Dimension size = Toolkit.getDefaultToolkit().getScreenSize(); 
+    private int width = (int)size.getWidth(); 
+    private int height = (int)size.getHeight(); 
+    
+    private int window_w = (width*75)/100;
+    private int window_h = (height*75)/100;
+    
+    private int buttonSize_w = 100;
+    private int buttonSize_h = 50;
+    private int buttonPosition_w = (window_w/2)-(buttonSize_w/2);
+    private int buttonPosition_h = window_h/2;
+
+    private int gamenameSize_w = 600;
+    private int gamenameSize_h = 200;
+    private int gamenamePosition_w = (window_w/2)-(gamenameSize_w/2);
+    private int gamenamePosition_h = (window_h/2)-gamenameSize_h;
+  
+    
+	Frame window = new Frame();
+	Button button_1 = new Button("Start Game");
+	Button button_2 = new Button("Exit");
+	JLabel gameName = new JLabel("Snake Game");
+	
 	
 	public Renderer(){
-		= -1width = Toolkit.getDefaultToolkit().getScreenSize().width;
-		height = Toolkit.getDefaultToolkit().getScreenSize().height;
-	
-		f.setSize((int)(3.0/4.0 * width), (int) (3.0/4.0 * height));
-		f.setLocation((int)(1.0/8.0 * width), (int) (1.0/8.0 * height));
-		f.setTitle("Snake Game");
+		button_1.setBounds(buttonPosition_w, buttonPosition_h, buttonSize_w, buttonSize_h);
+		button_2.setBounds(buttonPosition_w, buttonPosition_h+buttonSize_h+25, buttonSize_w, buttonSize_h);
+		gameName.setBounds(gamenamePosition_w, gamenamePosition_h, gamenameSize_w, gamenameSize_h);
+		gameName.setFont(new Font(gameName.getName(), 65, 100));
 		
-		b.setBounds((int)(9.0/32.0 * width), (int) (35.0/80.0 * height),(int)(3.0/16.0 * width), (int) (3.0/40.0 * height));
-		b2.setBounds((int)(9.0/32.0 * width), (int) (45.0/80.0 * height),(int)(3.0/16.0 * width), (int) (3.0/40.0 * height));
+		window.add(button_1);
+		window.add(button_2);
+		window.add(gameName);
 		
-		int fontSizeToUse = (int) (5.0/40.0 * height);
-		l.setBounds((int)(5.0/32.0 * width), (int) (5.0/80.0 * height), width, (int) (5.0/40.0 * height));
-		l.setFont(new Font(l.getName(), Font.PLAIN, fontSizeToUse));
+		button_1.addActionListener(new jouer());
+		button_2.addActionListener(new Sortir());
 		
-		f.add(b);
-		f.add(b2);
-		f.add(l);
+		window.setSize(window_w, window_h);
+		window.setTitle("Snake Game");
 		
-		b.addActionListener(new jouer());
-		b2.addActionListener(new Sortir());
-		
-		f.setLayout(null);
-		f.setVisible(true);
+		window.setLayout(null);
+		window.setVisible(true);
 		
 	}
 	
 	public class jouer implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			f.dispose();
+			window.dispose();
 		}
 	}
 
