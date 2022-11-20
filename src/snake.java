@@ -20,7 +20,10 @@ public class snake{ int board_size = 16; // Size of the board
 					stail[i][j] = 0;
 				}
 		}
-		
+
+		public int snakeLength() {
+			return snakeLength;
+		}
         // Check if next move of the snake will result in Game Over
 		// Collision of the head with a border or the tail
 		public void checkDeadlyMove(int[] direction) {
