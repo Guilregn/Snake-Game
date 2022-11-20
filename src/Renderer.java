@@ -48,7 +48,9 @@ public class Renderer extends Frame {
 		
 		window.setSize(window_w, window_h);
 		window.setTitle("Snake Game");
-		
+
+		window.setLocationRelativeTo(null);
+		window.setResizable(false);
 		window.setLayout(null);
 		window.setVisible(true);
 	}
