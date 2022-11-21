@@ -25,29 +25,31 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
         
 		int width = (int)size.getWidth(); 
 		int height = (int)size.getHeight(); 
-		int window_w = (width*75)/100;
-		int window_h = (height*75)/100;
-		
+		int window_w = (width*95)/100;
+		int window_h = (height*95)/100;
+
 		JFrame f = new JFrame();
-		
-		f.setTitle("Snake Game");
-		
+
 		// Make the exit button work
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.add(Rg);
 		f.pack();
 		f.setSize(window_w, window_h);
+		f.setTitle("Snake Game");
+		f.setLocationRelativeTo(null);
+		f.setResizable(false);
 		f.setVisible(true);
 
     }
 	
 		
 		int board_size = 16; // Size of the board	
-	    snake s = new snake(); 
+	    	snake s = new snake(); 
 		apple a = new apple();
 		boolean appleMatch = false;
 		int[] dir = {1,0}; // Direction of the head of the snake
-		
+        	int counter = 0; // timer number of sequence
+        	int appleEaten = 1;
 		
 		@Override // Create the graphics of the board, snake, apple...
 		public void paintComponent(Graphics g) {
@@ -107,22 +109,50 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	   
 		// Initialization of Panel, apple, snake...
 	    public RendererGame() {
-			s.Init();
+	        s.Init();
 			a.Init(s);
             this.repaint();
 			appleMatch = false;
 			
 			// Initialization of a Timer : each 500 ms, the function actionPerformed will play
-			// Action performed will move the snake accordingly to KeyListener and update the graphics of the panel
+		    // Action performed will move the snake accordingly to KeyListener and update the graphics of the panel
 		    Timer timer = new Timer(500, this);
-	        timer.start();
+		 	timer.start();
 			}
-	    	
+	    
 	    @Override // Move the snake accordingly to actionListener
         public void actionPerformed(ActionEvent e) {
+	        counter = counter+1;
+
+	    	JLabel stats = new JLabel("Stats:");
+	    	JLabel chrono = new JLabel("Chrono: "+counter);
+	    	JLabel aEaten = new JLabel("Fruits eaten: "+appleEaten);
+	    	JLabel control = new JLabel("Controls:");
+	    	JLabel instruction1 = new JLabel("Move Up: click on Up Arrow Key | Move Down: click on Down Arrow Key");
+	    	JLabel instruction2 = new JLabel("Move Left: click on Left Arrow Key | Move Right: click on Right Arrow Key");
+	    	
+	    	//s.snakeLength;
+
+	    	stats.setBounds(1000, 10, 300, 100);
+	    	chrono.setBounds(800, 50, 300, 100);
+	    	aEaten.setBounds(800, 70, 300, 100);
+	    	control.setBounds(990, 110, 300, 100);
+	    	instruction1.setBounds(800, 150, 600, 100);
+	    	instruction2.setBounds(800, 170, 600, 100);
+
+	    	this.add(stats);
+    	    this.add(chrono);
+    	    this.repaint();
+    	    this.add(aEaten);
+    	    this.add(control);
+    	    this.add(instruction1);
+    	    this.add(instruction2);
+	    	
+
+    	    
 	    	    // If the snake is not alive, he doesn't move
              	if(s.alive == 1) {
-             	    
+             		             		
              		// Change the direction according to last arrow key pressed (doesn't change anything is last pressed direction is the opposite of current dirction)
              		if(pressed == KeyEvent.VK_UP && dir[1] == 0) {
              			dir[0] = 0;
@@ -161,6 +191,8 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
              				// If snake ate apple and do not fill all cells, create new apple
              				a = new apple();
              				a.Init(s);
+             				appleEaten = s.snakeLength()-1;
+
              			}
              			
              			//Reset apple position
@@ -174,11 +206,11 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
                  		
                  		// Game Over button in the center of the Frame
                  		JButton GO = new JButton("Game Over");
-                 		GO.setSize(600, 400);
-                 		GO.setFont(new Font("Arial", Font.PLAIN, 100));
+                 		GO.setSize(400, 100);
+                 		GO.setFont(new Font("Arial", Font.PLAIN, 50));
                  		
                  		this.add(GO);
-                 		GO.setLocation(500,200);
+                 		GO.setLocation(220,300);
                  		this.repaint();
                  	}
              	}
@@ -186,15 +218,16 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
              	if(s.alive == 2) { // If alive == 2 (Win)
              	    // Win screen in the center of the Frame
              		JButton GO = new JButton("It's won !");
-             		GO.setSize(600, 400);
-             		GO.setFont(new Font("Arial", Font.PLAIN, 100));
+             		GO.setSize(400, 100);
+             		GO.setFont(new Font("Arial", Font.PLAIN, 50));
              		
              		this.add(GO);
-             		GO.setLocation(500,200);
+             		GO.setLocation(220,300);
              		this.repaint();	
              	}
 	        
 	        }
+	    
 	    
 	    // Key listener functions : only use the case when a key is pressed
 		public void keyTyped(KeyEvent e) {
