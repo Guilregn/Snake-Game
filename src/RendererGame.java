@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 // Class that starts / process the game with keyboard inputs and action listener on a Panel
 public class RendererGame extends JPanel implements ActionListener,KeyListener{
  	
+
+    
  	// "Main" method : Initiate Frame and Panel
 	public static  void RendertheGame() {
 		// Get dimension of the screen of the computer to create a Frame with right width and length
@@ -44,15 +46,45 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	
 		
 		int board_size = 16; // Size of the board	
-	    	snake s = new snake(); 
+	    snake s = new snake(); 
 		apple a = new apple();
 		boolean appleMatch = false;
+		
+		
 		int[] dir = {1,0}; // Direction of the head of the snake
-        	int counter = 0; // timer number of sequence
-        	int appleEaten = 1;
+        int counter = 0; // timer number of sequence
+        int appleEaten = 0;
+        
+        JLabel stats = new JLabel("Stats:");
+		JLabel chrono = new JLabel("Chrono: " + counter);
+		JLabel aEaten = new JLabel("Fruits eaten: " + appleEaten);
+		JLabel control = new JLabel("Controls:");
+		JLabel instruction1 = new JLabel("Move Up: click on Up Arrow Key | Move Down: click on Down Arrow Key");
+		JLabel instruction2 = new JLabel("Move Left: click on Left Arrow Key | Move Right: click on Right Arrow Key");
+		
+		//s.snakeLength;
+
+		
 		
 		@Override // Create the graphics of the board, snake, apple...
 		public void paintComponent(Graphics g) {
+			
+			chrono.setText("Chrono: " + counter);
+			aEaten.setText("Fruits eaten: " + appleEaten);
+			
+	    	stats.setBounds(1000, 10, 300, 100);
+	    	chrono.setBounds(800, 50, 300, 100);
+	    	aEaten.setBounds(800, 70, 300, 100);
+	    	control.setBounds(990, 110, 300, 100);
+	    	instruction1.setBounds(800, 150, 600, 100);
+	    	instruction2.setBounds(800, 170, 600, 100);
+
+			this.add(stats);
+		    this.add(chrono);
+		    this.add(aEaten);
+		    this.add(control);
+		    this.add(instruction1);
+		    this.add(instruction2);
 			
 			// White board (rectangle)
 			super.paintComponent(g);
@@ -124,35 +156,14 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
         public void actionPerformed(ActionEvent e) {
 	        counter = counter+1;
 
-	    	JLabel stats = new JLabel("Stats:");
-	    	JLabel chrono = new JLabel("Chrono: "+counter);
-	    	JLabel aEaten = new JLabel("Fruits eaten: "+appleEaten);
-	    	JLabel control = new JLabel("Controls:");
-	    	JLabel instruction1 = new JLabel("Move Up: click on Up Arrow Key | Move Down: click on Down Arrow Key");
-	    	JLabel instruction2 = new JLabel("Move Left: click on Left Arrow Key | Move Right: click on Right Arrow Key");
-	    	
 	    	//s.snakeLength;
 
-	    	stats.setBounds(1000, 10, 300, 100);
-	    	chrono.setBounds(800, 50, 300, 100);
-	    	aEaten.setBounds(800, 70, 300, 100);
-	    	control.setBounds(990, 110, 300, 100);
-	    	instruction1.setBounds(800, 150, 600, 100);
-	    	instruction2.setBounds(800, 170, 600, 100);
 
-	    	this.add(stats);
-    	    this.add(chrono);
-    	    this.repaint();
-    	    this.add(aEaten);
-    	    this.add(control);
-    	    this.add(instruction1);
-    	    this.add(instruction2);
-	    	
-
+		    
     	    
 	    	    // If the snake is not alive, he doesn't move
              	if(s.alive == 1) {
-             		             		
+             		this.repaint();	
              		// Change the direction according to last arrow key pressed (doesn't change anything is last pressed direction is the opposite of current dirction)
              		if(pressed == KeyEvent.VK_UP && dir[1] == 0) {
              			dir[0] = 0;
@@ -191,7 +202,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
              				// If snake ate apple and do not fill all cells, create new apple
              				a = new apple();
              				a.Init(s);
-             				appleEaten = s.snakeLength()-1;
+             				appleEaten = s.snakeLength - 1;
 
              			}
              			
@@ -223,7 +234,6 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
              		
              		this.add(GO);
              		GO.setLocation(220,300);
-             		this.repaint();	
              	}
 	        
 	        }
@@ -243,5 +253,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	        return;
 	    }
 		 
+
+		
 	
 }
