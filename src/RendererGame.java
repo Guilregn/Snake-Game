@@ -62,9 +62,6 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 		JLabel instruction1 = new JLabel("Move Up: click on Up Arrow Key | Move Down: click on Down Arrow Key");
 		JLabel instruction2 = new JLabel("Move Left: click on Left Arrow Key | Move Right: click on Right Arrow Key");
 		
-		//s.snakeLength;
-
-		
 		
 		@Override // Create the graphics of the board, snake, apple...
 		public void paintComponent(Graphics g) {
@@ -102,8 +99,8 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			g.setColor(Color.GREEN);
 			// Head of the snake (rectangle + triangle) with its position in a cell depending on its leaning (direction)
 			if(dir[0] == -1) {
-			g.fillRect(120 + 40 * (s.shead[0]-1), 60 + 40 * (s.shead[1]-1), 20, 20);		 
-			g.fillPolygon(new int[] {120 + 40 * (s.shead[0]-1), 120 + 40 * (s.shead[0]-1), 100 + 40 * (s.shead[0]-1)}, new int[] {50 + 40 * (s.shead[1]-1),90 + 40 * (s.shead[1]-1),70 + 40 * (s.shead[1]-1)}, 3);
+				g.fillRect(120 + 40 * (s.shead[0]-1), 60 + 40 * (s.shead[1]-1), 20, 20);		 
+				g.fillPolygon(new int[] {120 + 40 * (s.shead[0]-1), 120 + 40 * (s.shead[0]-1), 100 + 40 * (s.shead[0]-1)}, new int[] {50 + 40 * (s.shead[1]-1),90 + 40 * (s.shead[1]-1),70 + 40 * (s.shead[1]-1)}, 3);
 			}
 			
 			else if(dir[0] == 1) {
@@ -155,11 +152,6 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	    @Override // Move the snake accordingly to actionListener
         public void actionPerformed(ActionEvent e) {
 	        counter = counter+1;
-
-	    	//s.snakeLength;
-
-
-		    
     	    
 	    	    // If the snake is not alive, he doesn't move
              	if(s.alive == 1) {
@@ -218,7 +210,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
                  		// Game Over button in the center of the Frame
                  		JButton GO = new JButton("Game Over");
                  		GO.setSize(400, 100);
-                 		GO.setFont(new Font("Arial", Font.PLAIN, 50));
+                 		GO.setFont(new Font("Arial", Font.PLAIN, 27));
                  		
                  		this.add(GO);
                  		GO.setLocation(220,300);
@@ -230,7 +222,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
              	    // Win screen in the center of the Frame
              		JButton GO = new JButton("It's won !");
              		GO.setSize(400, 100);
-             		GO.setFont(new Font("Arial", Font.PLAIN, 50));
+             		GO.setFont(new Font("Arial", Font.PLAIN, 27));
              		
              		this.add(GO);
              		GO.setLocation(220,300);
@@ -252,8 +244,5 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	    public void keyReleased(KeyEvent e) {
 	        return;
 	    }
-		 
-
-		
-	
+		 	
 }
