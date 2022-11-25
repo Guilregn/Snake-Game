@@ -49,6 +49,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	    snake s = new snake(); 
 		apple a = new apple();
 		boolean appleMatch = false;
+		boolean pause = false; // Pause the game if pause == true
 		
 		
 		int[] dir = {1,0}; // Direction of the head of the snake
@@ -61,8 +62,20 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 		JLabel control = new JLabel("Controls:");
 		JLabel instruction1 = new JLabel("Move Up: click on Up Arrow Key | Move Down: click on Down Arrow Key");
 		JLabel instruction2 = new JLabel("Move Left: click on Left Arrow Key | Move Right: click on Right Arrow Key");
-		JLabel instruction3 = new JLabel("Press Space key to get pause or resume the game");
+		JLabel instruction3 = new JLabel("Pause : press 'P'");
+		
+		// Game Over button in the center of the Frame
+ 		JButton GO = new JButton("Game Over");
+		// Pause button in the center of the Frame
+ 		JButton GOPause = new JButton("Pause");
+ 	    // Win screen in the center of the Frame
+ 		JButton GOWin = new JButton("It's won !");
+ 		
+ 		
+		
+		//s.snakeLength;
 
+		
 		
 		@Override // Create the graphics of the board, snake, apple...
 		public void paintComponent(Graphics g) {
@@ -70,13 +83,25 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			chrono.setText("Chrono: " + counter);
 			aEaten.setText("Fruits eaten: " + appleEaten);
 			
+			
+			GOPause.setSize(400, 100);
+			GOPause.setFont(new Font("Arial", Font.PLAIN, 50));
+	 		GOPause.setLocation(220,300);
+     		GO.setSize(400, 100);
+     		GO.setFont(new Font("Arial", Font.PLAIN, 50));
+     		GO.setLocation(220,300);
+     		GOWin.setSize(400, 100);
+     		GOWin.setFont(new Font("Arial", Font.PLAIN, 50));
+     		GOWin.setLocation(220,300);
+     		
 	    	stats.setBounds(1000, 10, 300, 100);
 	    	chrono.setBounds(800, 50, 300, 100);
 	    	aEaten.setBounds(800, 70, 300, 100);
 	    	control.setBounds(990, 110, 300, 100);
 	    	instruction1.setBounds(800, 150, 600, 100);
 	    	instruction2.setBounds(800, 170, 600, 100);
-	    	instruction3.setBounds(800, 190, 600, 100);
+	    	instruction3.setBounds(800,190,600,100);
+	    	
 
 
 			this.add(stats);
@@ -103,8 +128,8 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			g.setColor(Color.GREEN);
 			// Head of the snake (rectangle + triangle) with its position in a cell depending on its leaning (direction)
 			if(dir[0] == -1) {
-				g.fillRect(120 + 40 * (s.shead[0]-1), 60 + 40 * (s.shead[1]-1), 20, 20);		 
-				g.fillPolygon(new int[] {120 + 40 * (s.shead[0]-1), 120 + 40 * (s.shead[0]-1), 100 + 40 * (s.shead[0]-1)}, new int[] {50 + 40 * (s.shead[1]-1),90 + 40 * (s.shead[1]-1),70 + 40 * (s.shead[1]-1)}, 3);
+			g.fillRect(120 + 40 * (s.shead[0]-1), 60 + 40 * (s.shead[1]-1), 20, 20);		 
+			g.fillPolygon(new int[] {120 + 40 * (s.shead[0]-1), 120 + 40 * (s.shead[0]-1), 100 + 40 * (s.shead[0]-1)}, new int[] {50 + 40 * (s.shead[1]-1),90 + 40 * (s.shead[1]-1),70 + 40 * (s.shead[1]-1)}, 3);
 			}
 			
 			else if(dir[0] == 1) {
@@ -131,14 +156,34 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			g.setColor(Color.RED);
 			g.fillOval(100 + 40*(a.pos[0]-1), 50 + (a.pos[1]-1)*40, 40, 40);
 			
-			if (s.alive == 0) {
-					
+			if (pause && s.alive == 1) {
+				// Pause button in the center of the Frame
+				this.add(GOPause);
 			}
-			 
+			
+			else {
+				this.remove(GOPause);
+			}
+			
+			if (s.alive == 0) {
+				// Pause button in the center of the Frame
+				this.add(GO);
+			}
+			
+			else {
+				this.remove(GO);
+			}
+			
+			if (s.alive == 2) {
+				// Pause button in the center of the Frame
+				this.add(GOWin);
+			}
+			
+			else {
+				this.remove(GOWin);
+			}
 		 }
-	    
-		// pressed is the key code of the last pressed arrow key which is a legal move
-		private int pressed;
+	  
 	   
 		// Initialization of Panel, apple, snake...
 	    public RendererGame() {
@@ -153,12 +198,26 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 		 	timer.start();
 			}
 	    
+	    
+	    
+	  	// pressed is the key code of the last pressed arrow key which is a legal move
+	  	private int pressed;
+	  		
 	    @Override // Move the snake accordingly to actionListener
         public void actionPerformed(ActionEvent e) {
-	        counter = counter+1;
+	        	counter = counter+1; //s.snakeLength;
+	        
+	        	if (pressed == KeyEvent.VK_P) {
+	        		pause = !pause;
+	        		this.repaint();
+	        		pressed = 0; // pressed is reset for no unpausing (Last pressed key is p...)
+	        	}
+
+
+		    
     	    
-	    	    // If the snake is not alive, he doesn't move
-             	if(s.alive == 1) {
+	    	    // If the snake is not alive, he doesn't move; same for pause
+             	if(s.alive == 1 && !pause) {
              		this.repaint();	
              		// Change the direction according to last arrow key pressed (doesn't change anything is last pressed direction is the opposite of current dirction)
              		if(pressed == KeyEvent.VK_UP && dir[1] == 0) {
@@ -209,28 +268,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
              			this.repaint();
              		} 
                  	
-                 	else { // If alive == 0 (Dead)
-                 		
-                 		// Game Over button in the center of the Frame
-                 		JButton GO = new JButton("Game Over");
-                 		GO.setSize(400, 100);
-                 		GO.setFont(new Font("Arial", Font.PLAIN, 27));
-                 		
-                 		this.add(GO);
-                 		GO.setLocation(220,300);
-                 		this.repaint();
-                 	}
-             	}
-             	
-             	if(s.alive == 2) { // If alive == 2 (Win)
-             	    // Win screen in the center of the Frame
-             		JButton GO = new JButton("It's won !");
-             		GO.setSize(400, 100);
-             		GO.setFont(new Font("Arial", Font.PLAIN, 27));
-             		
-             		this.add(GO);
-             		GO.setLocation(220,300);
-             	}
+             	}           	
 	        
 	        }
 	    
@@ -248,5 +286,8 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	    public void keyReleased(KeyEvent e) {
 	        return;
 	    }
-		 	
+		 
+
+		
+	
 }
