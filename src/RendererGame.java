@@ -61,7 +61,8 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 		JLabel control = new JLabel("Controls:");
 		JLabel instruction1 = new JLabel("Move Up: click on Up Arrow Key | Move Down: click on Down Arrow Key");
 		JLabel instruction2 = new JLabel("Move Left: click on Left Arrow Key | Move Right: click on Right Arrow Key");
-		
+		JLabel instruction3 = new JLabel("Press Space key to get pause or resume the game");
+
 		
 		@Override // Create the graphics of the board, snake, apple...
 		public void paintComponent(Graphics g) {
@@ -75,6 +76,8 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	    	control.setBounds(990, 110, 300, 100);
 	    	instruction1.setBounds(800, 150, 600, 100);
 	    	instruction2.setBounds(800, 170, 600, 100);
+	    	instruction3.setBounds(800, 190, 600, 100);
+
 
 			this.add(stats);
 		    this.add(chrono);
@@ -82,6 +85,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 		    this.add(control);
 		    this.add(instruction1);
 		    this.add(instruction2);
+		    this.add(instruction3);
 			
 			// White board (rectangle)
 			super.paintComponent(g);
