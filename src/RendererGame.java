@@ -1,49 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import javax.swing.*;
-import javax.swing.border.*;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
-import java.time.*;
-import javax.imageio.ImageIO;
 
 // Class that starts / process the game with keyboard inputs and action listener on a Panel
 public class RendererGame extends JPanel implements ActionListener,KeyListener{
- 	
-
-    
- 	// "Main" method : Initiate Frame and Panel
-	public static  void RendertheGame() {
-		// Get dimension of the screen of the computer to create a Frame with right width and length
-		Dimension size = Toolkit.getDefaultToolkit().getScreenSize(); 
-		
-		// this
-		RendererGame Rg = new RendererGame();
-        Rg.addKeyListener(Rg); // KeyListener included in class
-        Rg.setFocusable(true);
-        
-		int width = (int)size.getWidth(); 
-		int height = (int)size.getHeight(); 
-		int window_w = (width*95)/100;
-		int window_h = (height*95)/100;
-
-		JFrame f = new JFrame();
-
-		// Make the exit button work
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.add(Rg);
-		f.pack();
-		f.setSize(window_w, window_h);
-		f.setTitle("Snake Game");
-		f.setLocationRelativeTo(null);
-		f.setResizable(false);
-		f.setVisible(true);
-
-    }
-	
 		
 		int board_size = 16; // Size of the board	
 	    snake s = new snake(); 
@@ -53,11 +13,11 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 		
 		
 		int[] dir = {1,0}; // Direction of the head of the snake
-        int counter = 0; // timer number of sequence
-        int appleEaten = 0;
+        float counter = 0; // timer number of sequence -> +1 = 0.25 s
+        int appleEaten = 0; // Number of apple that were eaten
         
         JLabel stats = new JLabel("Stats:");
-		JLabel chrono = new JLabel("Chrono: " + counter);
+		JLabel chrono = new JLabel("Chrono: " + counter/4);
 		JLabel aEaten = new JLabel("Fruits eaten: " + appleEaten);
 		JLabel control = new JLabel("Controls:");
 		JLabel instruction1 = new JLabel("Move Up: click on Up Arrow Key | Move Down: click on Down Arrow Key");
@@ -68,22 +28,20 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
  		JButton GO = new JButton("Game Over");
 		// Pause button in the center of the Frame
  		JButton GOPause = new JButton("Pause");
- 	    // Win screen in the center of the Frame
+ 	    // Win button in the center of the Frame
  		JButton GOWin = new JButton("It's won !");
- 		
- 		
-		
-		//s.snakeLength;
-
+ 	  
+	  	// pressed is the key code of the last pressed arrow key which is a legal move
+	  	private int pressed;
 		
 		
 		@Override // Create the graphics of the board, snake, apple...
 		public void paintComponent(Graphics g) {
 			
-			chrono.setText("Chrono: " + counter);
+			chrono.setText("Chrono: " + counter/4);
 			aEaten.setText("Fruits eaten: " + appleEaten);
 			
-			
+			//Set size and bounds of Buttons/Labels 
 			GOPause.setSize(400, 100);
 			GOPause.setFont(new Font("Arial", Font.PLAIN, 50));
 	 		GOPause.setLocation(220,300);
@@ -103,7 +61,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	    	instruction3.setBounds(800,190,600,100);
 	    	
 
-
+            //add Labels
 			this.add(stats);
 		    this.add(chrono);
 		    this.add(aEaten);
@@ -166,7 +124,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			}
 			
 			if (s.alive == 0) {
-				// Pause button in the center of the Frame
+				// Game Over button in the center of the Frame
 				this.add(GO);
 			}
 			
@@ -175,7 +133,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			}
 			
 			if (s.alive == 2) {
-				// Pause button in the center of the Frame
+				// Win button in the center of the Frame
 				this.add(GOWin);
 			}
 			
@@ -184,9 +142,34 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			}
 		 }
 	  
-	   
+		// "Main" method : Initiate Frame and Panel
 		// Initialization of Panel, apple, snake...
-	    public RendererGame() {
+	    public RendererGame() { 
+			// Get dimension of the screen of the computer to create a Frame with right width and length
+			Dimension size = Toolkit.getDefaultToolkit().getScreenSize(); 
+			
+			// this -> JPanel
+	        this.addKeyListener(this); // KeyListener included in class
+	        this.setFocusable(true);
+	        
+			int width = (int)size.getWidth(); 
+			int height = (int)size.getHeight(); 
+			int window_w = (width*95)/100;
+			int window_h = (height*95)/100;
+
+			JFrame f = new JFrame();
+
+			// Make the exit button work
+			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			f.add(this);
+			f.pack();
+			f.setSize(window_w, window_h);
+			f.setTitle("Snake Game");
+			f.setLocationRelativeTo(null);
+			f.setResizable(false);
+			f.setVisible(true);
+			
+			//Initialization of snake and apple
 	        s.Init();
 			a.Init(s);
             this.repaint();
@@ -194,31 +177,28 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			
 			// Initialization of a Timer : each 500 ms, the function actionPerformed will play
 		    // Action performed will move the snake accordingly to KeyListener and update the graphics of the panel
-		    Timer timer = new Timer(500, this);
+		    Timer timer = new Timer(250, this);
 		 	timer.start();
+
 			}
 	    
-	    
-	    
-	  	// pressed is the key code of the last pressed arrow key which is a legal move
-	  	private int pressed;
+
 	  		
 	    @Override // Move the snake accordingly to actionListener
         public void actionPerformed(ActionEvent e) {
-	        	counter = counter+1; //s.snakeLength;
-	        
+	        	
 	        	if (pressed == KeyEvent.VK_P) {
-	        		pause = !pause;
+	        		pause = !pause; //pause or unpause
 	        		this.repaint();
-	        		pressed = 0; // pressed is reset for no unpausing (Last pressed key is p...)
+	        		pressed = 0; // (int) pressed is reset to 0 for no unpausing (Last pressed key is VK_P...)
 	        	}
-
-
-		    
+	        	
     	    
 	    	    // If the snake is not alive, he doesn't move; same for pause
              	if(s.alive == 1 && !pause) {
              		this.repaint();	
+             		counter = counter+1; //Time goes by... so slowly;
+             		
              		// Change the direction according to last arrow key pressed (doesn't change anything is last pressed direction is the opposite of current dirction)
              		if(pressed == KeyEvent.VK_UP && dir[1] == 0) {
              			dir[0] = 0;
@@ -272,6 +252,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	        
 	        }
 	    
+
 	    
 	    // Key listener functions : only use the case when a key is pressed
 		public void keyTyped(KeyEvent e) {

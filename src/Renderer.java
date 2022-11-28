@@ -60,8 +60,6 @@ public class Renderer extends Frame {
 		public void actionPerformed(ActionEvent e) {
 			window.dispose();
 			RendererGame Game = new RendererGame();
-			Game.RendertheGame();
-	  
 		}
 	}
 
