@@ -2,7 +2,8 @@ import java.util.Arrays;
 
 
 //Class which depicts movements and winning/losing conditions of the snake 
-public class snake{ int board_size = 16; // Size of the board
+public class snake{ 
+		int board_size = 16; // Size of the board
 		// Position of the head of the snake; starts in the center
 		int[] shead = {(int) board_size / 2, (int) board_size / 2};
 		// Position of the tail of the snake; multiple dots
@@ -11,7 +12,7 @@ public class snake{ int board_size = 16; // Size of the board
 		int alive = 1; // Alive = 1; Dead = 0; Win = 2
 		int snakeLength = 1; // Length of the snake
 		
-		public void Init() {
+		public snake() {
 			// Initialization of snake: no tail
 			// Position {0;0} means that the dot doesn't exist 
 			// Grid position starts from 1 to Board_size (length and width)
@@ -20,10 +21,7 @@ public class snake{ int board_size = 16; // Size of the board
 					stail[i][j] = 0;
 				}
 		}
-
-		public int snakeLength() {
-			return snakeLength;
-		}
+		
         // Check if next move of the snake will result in Game Over
 		// Collision of the head with a border or the tail
 		public void checkDeadlyMove(int[] direction) {

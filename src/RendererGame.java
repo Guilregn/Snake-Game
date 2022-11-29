@@ -7,15 +7,17 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 		
 		int board_size = 16; // Size of the board	
 	    snake s = new snake(); 
-		apple a = new apple();
+		apple a = new apple(s);
 		boolean appleMatch = false;
 		boolean pause = false; // Pause the game if pause == true
 		
 		
 		int[] dir = {1,0}; // Direction of the head of the snake
         float counter = 0; // timer number of sequence -> +1 = 0.25 s
-        int appleEaten = 0; // Number of apple that were eaten
-        
+        int appleEaten = 0; // Number of apple that were eaten   
+
+		JFrame f = new JFrame();
+		
         JLabel stats = new JLabel("Stats:");
 		JLabel chrono = new JLabel("Chrono: " + counter/4);
 		JLabel aEaten = new JLabel("Fruits eaten: " + appleEaten);
@@ -34,10 +36,47 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 	  	// pressed is the key code of the last pressed arrow key which is a legal move
 	  	private int pressed;
 		
+	  	
+		// "Main" method : Initiate Frame and Panel
+		// Initialization of Panel, apple, snake...
+	    public RendererGame() { 
+			// Get dimension of the screen of the computer to create a Frame with right width and length
+			Dimension size = Toolkit.getDefaultToolkit().getScreenSize(); 
+			
+			// this -> JPanel
+	        this.addKeyListener(this); // KeyListener included in class
+	        this.setFocusable(true);
+	        
+			int width = (int)size.getWidth(); 
+			int height = (int)size.getHeight(); 
+			int window_w = (width*95)/100;
+			int window_h = (height*95)/100;
+
+
+			// Make the exit button work
+			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			f.add(this);
+			f.pack();
+			f.setSize(window_w, window_h);
+			f.setTitle("Snake Game");
+			f.setLocationRelativeTo(null);
+			f.setResizable(false);
+			f.setVisible(true);
+			
+			//Initialization of snake and apple
+            this.repaint();
+			appleMatch = false;
+			
+			// Initialization of a Timer : each 500 ms, the function actionPerformed will play
+		    // Action performed will move the snake accordingly to KeyListener and update the graphics of the panel
+		    Timer timer = new Timer(250, this);
+		 	timer.start();
+
+			}
+	    
 		
 		@Override // Create the graphics of the board, snake, apple...
-		public void paintComponent(Graphics g) {
-			
+		public void paintComponent(Graphics g) {	
 			chrono.setText("Chrono: " + counter/4);
 			aEaten.setText("Fruits eaten: " + appleEaten);
 			
@@ -140,48 +179,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
 			else {
 				this.remove(GOWin);
 			}
-		 }
-	  
-		// "Main" method : Initiate Frame and Panel
-		// Initialization of Panel, apple, snake...
-	    public RendererGame() { 
-			// Get dimension of the screen of the computer to create a Frame with right width and length
-			Dimension size = Toolkit.getDefaultToolkit().getScreenSize(); 
-			
-			// this -> JPanel
-	        this.addKeyListener(this); // KeyListener included in class
-	        this.setFocusable(true);
-	        
-			int width = (int)size.getWidth(); 
-			int height = (int)size.getHeight(); 
-			int window_w = (width*95)/100;
-			int window_h = (height*95)/100;
-
-			JFrame f = new JFrame();
-
-			// Make the exit button work
-			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			f.add(this);
-			f.pack();
-			f.setSize(window_w, window_h);
-			f.setTitle("Snake Game");
-			f.setLocationRelativeTo(null);
-			f.setResizable(false);
-			f.setVisible(true);
-			
-			//Initialization of snake and apple
-	        s.Init();
-			a.Init(s);
-            this.repaint();
-			appleMatch = false;
-			
-			// Initialization of a Timer : each 500 ms, the function actionPerformed will play
-		    // Action performed will move the snake accordingly to KeyListener and update the graphics of the panel
-		    Timer timer = new Timer(250, this);
-		 	timer.start();
-
-			}
-	    
+		 }    
 
 	  		
 	    @Override // Move the snake accordingly to actionListener
@@ -235,8 +233,7 @@ public class RendererGame extends JPanel implements ActionListener,KeyListener{
              			
              			if (appleMatch && s.alive != 2) {
              				// If snake ate apple and do not fill all cells, create new apple
-             				a = new apple();
-             				a.Init(s);
+             				a = new apple(s);
              				appleEaten = s.snakeLength - 1;
 
              			}
